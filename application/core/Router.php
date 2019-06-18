@@ -1,0 +1,60 @@
+<?php
+
+namespace application\core;
+
+class Router{	
+
+	protected $routes = [];
+	protected $params = [];
+
+	function __construct(){
+		$arr = require 'application/config/routes.php';
+		foreach ($arr as $route => $params) {
+			//$route = account/login
+			//$params = ['controller' => 'account', 'action' => 'index']
+	
+			$this->add($route, $params);
+		}
+	}
+
+	public function add($route,$params){
+
+		$route = '#^'.$route.'$#';
+		$this->routes[$route] = $params;
+	}
+
+	public function match(){
+
+		$url = trim($_SERVER['REQUEST_URI'],'/');
+
+		foreach ($this->routes as $route => $params) {
+			// $route = #^account/login$#
+			// $params = ['controller' => 'account', 'action' => 'index']
+
+			if(preg_match($route, $url,$matches)){
+				$this->params = $params;
+				debug($this->params);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public function run(){
+		if($this->match()){
+			
+			$controller = 'application\controllers\\'.ucfirst($this->params['controller']).'Controller.php';
+			// $controller = 'application\controllers\AccountController.php'
+
+			if(class_exists($controller)){
+				//
+			}else{
+				echo $controller.' - not found';
+			}
+
+		}else{
+			echo "404 not found";
+		}
+
+	}
+}
