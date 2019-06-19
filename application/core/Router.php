@@ -32,8 +32,7 @@ class Router{
 			// $params = ['controller' => 'account', 'action' => 'index']
 
 			if(preg_match($route, $url,$matches)){
-				$this->params = $params;
-				debug($this->params);
+				$this->params = $params;				
 				return true;
 			}
 		}
@@ -43,13 +42,19 @@ class Router{
 	public function run(){
 		if($this->match()){
 			
-			$controller = 'application\controllers\\'.ucfirst($this->params['controller']).'Controller.php';
+			$path = 'application\controllers\\'.ucfirst($this->params['controller']).'Controller';
 			// $controller = 'application\controllers\AccountController.php'
 
-			if(class_exists($controller)){
-				//
+			if(class_exists($path)){
+				$action = $this->params['action'].'Action';
+				if(method_exists($path, $action)){
+					$controller = new $path($this->params);
+					$controller->$action();
+				}else{
+					echo 'Call undefinet method - '.$action;
+				}
 			}else{
-				echo $controller.' - not found';
+				echo $path.' - not found';
 			}
 
 		}else{
