@@ -18,3 +18,7 @@ return [
 	]
 
 ];
+
+asdasd
+asdasdasd
+addcslashes(sad, charlist)
