@@ -2,6 +2,8 @@
 
 namespace application\core;
 
+use application\core\View;
+
 class Router{	
 
 	protected $routes = [];
@@ -51,14 +53,14 @@ class Router{
 					$controller = new $path($this->params);
 					$controller->$action();
 				}else{
-					echo 'Call undefinet method - '.$action;
+					View::errorCode(404);
 				}
 			}else{
-				echo $path.' - not found';
+				View::errorCode(404);
 			}
 
 		}else{
-			echo "404 not found";
+			View::errorCode(404);
 		}
 
 	}

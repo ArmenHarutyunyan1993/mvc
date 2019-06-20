@@ -15,17 +15,36 @@ class View{
 
 	public function render($title,$vars = []){		
 
-		if(file_exists('application/views/'.$this->path.'.php')){
+		extract($vars); //$name = 'Mike'; $age = 45;
+
+		$path = 'application/views/'.$this->path.'.php';
+
+		if(file_exists($path)){
+
+			//$this->path = 'main/index'
+			//$this->layout = 'default'
 
 			ob_start();
-			require 'application/views/'.$this->path.'.php';
+			require $path;
 			$content = ob_get_clean();
 			require 'application/views/layouts/'.$this->layout.'.php';
 			
-		}else{
-			echo "View not found - ".$this->path.'.php';
-		}	
-
-		
+		}			
 	}
+
+	public function redirect($url){
+		header('location: '.$url);
+		exit;
+	}
+
+	public static function errorCode($code){
+		http_response_code($code);
+
+		$path = 'application/views/errors/'.$code.'.php';
+		if(file_exists($path)){
+			require 'application/views/errors/'.$code.'.php';	
+		}		
+		exit;
+	}
+
 }
