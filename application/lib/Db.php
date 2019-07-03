@@ -27,7 +27,7 @@ class Db
 		}
 
 		$stmt->execute();
-		
+
 		return $stmt;
 	}
 
@@ -38,7 +38,8 @@ class Db
 
 	public function column($sql, $params = []){
 
-		$result = $this->query($sql,$params);			
+		$result = $this->query($sql,$params);
+			
 		return $result->fetchColumn();	
 	}
 }
